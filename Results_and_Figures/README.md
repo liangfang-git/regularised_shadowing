@@ -46,8 +46,8 @@ figure folder, so the existing `./data` paths and figure filenames are kept.
 | `Figs_L96/plot_fig6.py` | `fig6_1.pdf`, `fig6_2.pdf` | `data/sol_15.0_29_0.npz`, `data/sol_15.0_29.npz` |
 | `Figs_L96/plot_fig7_8.py` | `fig7a.pdf`, `fig7b.pdf`, `fig8a.pdf`, `fig8b.pdf` | `data/NILSS_L96_10.npz`, `data/NILSS_L96_regularised_10.npz`, `data/FD_derivative_J1_10.dat`, `data/FD_derivative_J2_10.dat` |
 | `Figs_L96/plot_fig9.py` | `fig9a.pdf`, `fig9b.pdf` | `data/L96_conditions.npz` |
-| `Figs_L96/plot_fig10.py` | `fig10a.pdf`, `fig10b.pdf` | `data/NILSS_L96_regularised_10.npz`, `data/NILSS_L96_regularised_10_2.npz`, `data/FD_derivative_J1_10.dat`, `data/FD_derivative_J2_10.dat` |
-| `Figs_L96/plot_fig11.py` | `fig11a.pdf`, `fig11b.pdf` | `data/NILSS_L96_5.npz`, `data/NILSS_L96_regularised_5.npz`, `data/FD_derivative_J1_5.dat`, `data/FD_derivative_J2_5.dat` |
+| `Figs_L96/plot_fig10.py` | `fig10a.pdf`, `fig10b.pdf` | `data/NILSS_L96_regularised_dT.npz`|
+| `Figs_L96/plot_fig11.py` | `fig11a.pdf`, `fig11b.pdf` | `data/NILSS_L96_regularised_dT.npz`, `data/NILSS_L96_regularised_5.npz`, `data/FD_derivative_J1_5.dat`, `data/FD_derivative_J2_5.dat` |
 
 
 ## Kolmogorov-Flow Figures

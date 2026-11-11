@@ -1,10 +1,7 @@
-# use single direction and N tiem segments to solve Lorentz problem
+# plot regularised NILSS sensitivity versus the segment-length coefficient alpha, dT = alpha*round(1/lambda_1,2)
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.pylab as pylab
-import scipy.io
-from scipy.stats import norm
-from scipy import stats
 params = {'legend.fontsize': 7,
           'figure.figsize': (4, 3),
           'lines.linewidth': 1,
@@ -20,35 +17,23 @@ pylab.rcParams['font.serif'] = ['Times New Roman']
 pylab.rcParams.update(params)
 
 
-Sol1 = np.load("./data/NILSS_L96_regularised_10.npz")
-Sol2 = np.load("./data/NILSS_L96_regularised_10_2.npz")
-
+Sol = np.load("./data/NILSS_L96_regularised_dT.npz")
 fd1 = np.loadtxt("./data/FD_derivative_J1_10.dat")
 fd2 = np.loadtxt("./data/FD_derivative_J2_10.dat")
 
-c_arr = Sol1['c_arr']
-dJr1 = Sol1['dJr']
-st10 = np.array(dJr1[0,:,:]).std(1,ddof=1)
-st11 = np.array(dJr1[1,:,:]).std(1,ddof=1)
-dJr2 = Sol2['dJr']
-st20 = np.array(dJr2[0,:,:]).std(1,ddof=1)
-st21 = np.array(dJr2[1,:,:]).std(1,ddof=1)
-
-print(dJr1[0,0,:],dJr1[1,0,:])
+a_arr = Sol['dt_factors']
+ic = int(Sol['c']) - 10    # FD data are on the forcing grid F = 10, 11, ..., 20
+dJr = Sol['dJr']
+st0 = np.array(dJr[0,:,:]).std(1,ddof=1)
+st1 = np.array(dJr[1,:,:]).std(1,ddof=1)
 
 color0 = "C0"
-color1 = "C3"
-
-
 plt.figure()
-plt.plot(c_arr, dJr1[0,:,:], '+', markersize = 2, color = color0)
-plt.plot(c_arr, dJr2[0,:,:], '+', markersize = 2,color = color1)
-plt.plot(c_arr, np.mean(dJr1[0,:,:],axis=-1), '-+', markersize = 2, color = color0, lw = 1,label=r'$dT = 1/(\lambda_1)$')
-plt.plot(c_arr, np.mean(dJr2[0,:,:],axis=-1), '--+', markersize = 2, color = color1, lw = 1,label=r'$dT = 1/(2\lambda_1)$')
-plt.fill_between(c_arr, np.mean(dJr1[0,:,:],axis=-1)-st10, np.mean(dJr1[0,:,:],axis=-1)+st10, alpha=0.3, facecolor=color0)
-plt.fill_between(c_arr, np.mean(dJr2[0,:,:],axis=-1)-st20, np.mean(dJr2[0,:,:],axis=-1)+st20, alpha=0.3, facecolor=color1)
-plt.plot(c_arr, fd1, 'k-', label='Finite Difference')
-plt.xlabel(r'$F$')
+plt.plot(a_arr, dJr[0,:,:], '+', markersize = 2, color = color0)
+plt.plot(a_arr, np.mean(dJr[0,:,:],axis=-1), '-+', markersize = 2, color = color0, lw = 1,label=r'Regularised NILSS')
+plt.fill_between(a_arr, np.mean(dJr[0,:,:],axis=-1)-st0, np.mean(dJr[0,:,:],axis=-1)+st0, alpha=0.3, facecolor=color0)
+plt.plot(a_arr, fd1[ic]*np.ones_like(a_arr), 'k-', label='Finite Difference')
+plt.xlabel(r'$\alpha$')
 plt.ylabel(r'$dJ_1/dF$')
 plt.ylim([-0.45,0.45])
 plt.grid(True)
@@ -57,18 +42,13 @@ plt.savefig("fig10a.pdf",format='pdf')
 
 
 plt.figure()
-plt.plot(c_arr, dJr1[1,:,:], '+', markersize = 2,color = color0)
-plt.plot(c_arr, dJr2[1,:,:], '+', markersize = 2,color = color1)
-plt.plot(c_arr, np.mean(dJr1[1,:,:],axis=-1), '-+', markersize = 2, color = color0, lw = 1,label=r'$dT = 1/(\lambda_1)$')
-plt.plot(c_arr, np.mean(dJr2[1,:,:],axis=-1), '--+', markersize = 2, color = color1, lw = 1,label=r'$dT = 1/(2\lambda_1)$')
-plt.fill_between(c_arr, np.mean(dJr1[1,:,:],axis=-1)-st11, np.mean(dJr1[1,:,:],axis=-1)+st11, alpha=0.3, facecolor=color0)
-plt.fill_between(c_arr, np.mean(dJr2[1,:,:],axis=-1)-st21, np.mean(dJr2[1,:,:],axis=-1)+st21, alpha=0.3, facecolor=color1)
-plt.plot(c_arr, fd2, 'k-', label='Finite Difference')
-plt.xlabel(r'$F$')
+plt.plot(a_arr, dJr[1,:,:], '+', markersize = 2,color = color0)
+plt.plot(a_arr, np.mean(dJr[1,:,:],axis=-1), '-+', markersize = 2, color = color0, lw = 1,label=r'Regularised NILSS')
+plt.fill_between(a_arr, np.mean(dJr[1,:,:],axis=-1)-st1, np.mean(dJr[1,:,:],axis=-1)+st1, alpha=0.3, facecolor=color0)
+plt.plot(a_arr, fd2[ic]*np.ones_like(a_arr), 'k-', label='Finite Difference')
+plt.xlabel(r'$\alpha$')
 plt.ylabel(r'$dJ_2/dF$')
 plt.grid(True)
 plt.ylim([0,3.85])
 plt.legend()
 plt.savefig("fig10b.pdf",format='pdf')
-
-
